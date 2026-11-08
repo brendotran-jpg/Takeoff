@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/takeoff/rule.schema.json",
+  "title": "Measurement rule",
+  "description": "One measurement convention with a citation to its governing source. Store PARAPHRASES and citations only - never paste copyrighted standard text here unless your licence permits it (use local_reference to point at your own licensed copy instead).",
+  "type": "object",
+  "required": ["id", "title", "category", "measure_type", "unit", "convention", "source", "verification"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9-]{2,40}$"},
+    "version": {"type": "integer", "minimum": 1, "default": 1},
+    "title": {"type": "string", "minLength": 3, "maxLength": 120},
+    "category": {
+      "type": "string",
+      "enum": ["general", "substructure", "concrete", "formwork", "reinforcement", "masonry",
+               "framing", "structural-steel", "roofing", "external-walls", "windows-doors",
+               "internal-walls", "finishes", "wet-areas", "joinery", "services", "external-works"]
+    },
+    "measure_type": {"type": "string", "enum": ["linear", "area", "count", "reference"]},
+    "unit": {"type": "string", "enum": ["m", "m2", "m3", "no.", "item", "n/a"]},
+    "required_inputs": {
+      "description": "Extra values the measurer must enter to derive the unit (e.g. height to turn a length into a face area).",
+      "type": "array",
+      "items": {"type": "string", "enum": ["height_m", "depth_m", "pitch_deg"]},
+      "uniqueItems": true
+    },
+    "convention": {
+      "description": "Short paraphrase, in your own words, of how the item is measured.",
+      "type": "string", "minLength": 10, "maxLength": 700
+    },
+    "source": {
+      "type": "object",
+      "required": ["document", "clause", "clause_verified"],
+      "additionalProperties": false,
+      "properties": {
+        "document": {"type": "string"},
+        "publisher": {"type": "string"},
+        "edition": {"type": ["string", "null"]},
+        "clause": {"description": "Exact clause/section id. null when not yet verified against the official text - NEVER guess.", "type": ["string", "null"]},
+        "section_hint": {"description": "Where to look (section/trade name) when the exact clause is not yet confirmed.", "type": ["string", "null"]},
+        "clause_verified": {"type": "boolean"},
+        "url": {"type": ["string", "null"]}
+      }
+    },
+    "related_standards": {
+      "description": "Design/product standards that affect WHAT is measured (extents, laps, specification) but are not themselves measurement methods.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["document", "relevance"],
+        "additionalProperties": false,
+        "properties": {
+          "document": {"type": "string"},
+          "clause": {"type": ["string", "null"]},
+          "clause_verified": {"type": "boolean", "default": false},
+          "relevance": {"type": "string"}
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {"type": "string", "enum": ["placeholder_unverified", "user_verified", "deprecated"]},
+        "verified_by": {"type": ["string", "null"]},
+        "verified_on": {"type": ["string", "null"], "format": "date"},
+        "notes": {"type": ["string", "null"]}
+      }
+    },
+    "local_reference": {"description": "Pointer to YOUR licensed copy, e.g. 'file:///C:/Standards/ANZSMM.pdf#page=42'. Never shipped.", "type": ["string", "null"]},
+    "user_notes": {"type": ["string", "null"]},
+    "tags": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verification": {"properties": {"status": {"const": "user_verified"}}}}},
+      "then": {"properties": {"source": {"properties": {"clause": {"type": "string"}, "clause_verified": {"const": true}}}},
+               "required": ["verification"]}
+    }
+  ]
+}

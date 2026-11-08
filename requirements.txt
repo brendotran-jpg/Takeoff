@@ -1,0 +1,12 @@
+fastapi>=0.110
+uvicorn>=0.29
+python-multipart>=0.0.9
+pymupdf>=1.24        # AGPL-3.0 - see ARCHITECTURE.md "Licensing" before commercial use
+pydantic>=2.6
+PyYAML>=6.0
+jsonschema>=4.21
+openpyxl>=3.1
+numpy>=1.26          # revision overlay
+# dev / test
+pytest>=8.0
+httpx>=0.27

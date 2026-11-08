@@ -1,0 +1,340 @@
+# =============================================================================
+#  STARTER RULES LIBRARY  -  ALL ENTRIES ARE PLACEHOLDERS TO BE VERIFIED
+# =============================================================================
+#  * `convention` text is a short paraphrase of common Australian QS practice,
+#    written for this tool. It is NOT quoted from any standard.
+#  * Every `clause` is null on purpose. Exact clause numbers have NOT been
+#    checked against the official text, so none are given. Fill them in from
+#    your licensed copy, set clause_verified: true and
+#    verification.status: user_verified.
+#  * Editions marked "VERIFY" are the editions believed current at the time of
+#    writing; confirm against the publisher before relying on them.
+#  * Put your own edits in rules/user/*.yaml - an entry with the same `id`
+#    overrides the one here, and this file can be updated without losing work.
+# =============================================================================
+
+rules:
+
+  - id: GEN-SCALE-001
+    version: 1
+    title: Figured dimensions take precedence over scaled dimensions
+    category: general
+    measure_type: reference
+    unit: n/a
+    convention: >-
+      Where a dimension is written on the drawing, use it in preference to a
+      scaled measurement. Scaled quantities are a fallback and should be flagged
+      as such. Linear dimensions on Australian building drawings are normally
+      given in millimetres without a unit symbol.
+    source:
+      document: AS 1100.101 Technical drawing - General principles
+      publisher: Standards Australia
+      edition: "1992 (VERIFY - check for later amendment or reissue)"
+      clause: null
+      section_hint: Dimensioning section
+      clause_verified: false
+      url: https://www.standards.org.au/
+    related_standards:
+      - document: AS 1100.301 Technical drawing - Architectural drawing
+        clause: null
+        clause_verified: false
+        relevance: Architectural drawing conventions, symbols and scales.
+    verification: {status: placeholder_unverified, notes: "Confirm edition and the dimensioning clause."}
+    tags: [drawing-conventions]
+
+  - id: CONC-SLAB-001
+    version: 1
+    title: Concrete in suspended or ground slabs
+    category: concrete
+    measure_type: area
+    unit: m3
+    required_inputs: [depth_m]
+    convention: >-
+      Measure net volume of concrete as placed: slab plan area multiplied by
+      thickness. Thickenings, beams and edge beams are measured separately or
+      added. No deduction for reinforcement or cast-in items. Small voids and
+      penetrations are not deducted below a threshold set by the method of
+      measurement (verify threshold). Quantities are net - no waste allowance.
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: Australian Institute of Quantity Surveyors (AIQS) / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Concrete work / in-situ concrete
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    related_standards:
+      - document: AS 3600 Concrete structures
+        clause: null
+        clause_verified: false
+        relevance: Design standard - governs member sizes/cover shown on drawings, not measurement.
+      - document: AS 2870 Residential slabs and footings
+        clause: null
+        clause_verified: false
+        relevance: Residential slab and footing configurations (edge beam and thickening sizes).
+    verification: {status: placeholder_unverified}
+    tags: [in-situ]
+
+  - id: FORM-EDGE-001
+    version: 1
+    title: Formwork to slab edges
+    category: formwork
+    measure_type: linear
+    unit: m
+    convention: >-
+      Measure edge formwork by length along the slab perimeter, stating the
+      edge height range. Deeper edges may instead be measured as contact area -
+      check the height threshold in the method of measurement.
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: AIQS / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Concrete work - formwork
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    verification: {status: placeholder_unverified}
+
+  - id: MAS-WALL-001
+    version: 1
+    title: Masonry walls (by face area)
+    category: masonry
+    measure_type: linear
+    unit: m2
+    required_inputs: [height_m]
+    convention: >-
+      Measure walls in square metres stating thickness/construction (e.g.
+      single-leaf, cavity). Length taken on the wall centreline multiplied by
+      height. Openings are deducted, subject to the minimum-size rule in the
+      method of measurement. Record openings as separate negative (deduction)
+      lines so the adjustment is auditable.
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: AIQS / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Masonry
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    related_standards:
+      - document: AS 3700 Masonry structures
+        clause: null
+        clause_verified: false
+        relevance: Design standard - wall construction types, ties, articulation joints.
+      - document: AS 4773 Masonry in small buildings (Parts 1 and 2)
+        clause: null
+        clause_verified: false
+        relevance: Simplified masonry design/construction for small buildings.
+    verification: {status: placeholder_unverified}
+
+  - id: FRM-WALL-001
+    version: 1
+    title: Timber or steel wall framing (by length of wall)
+    category: framing
+    measure_type: linear
+    unit: m
+    convention: >-
+      Measure wall frames by length per wall type, stating stud size, spacing
+      and height. Internal and external walls kept separate. Lintels and
+      bracing may be itemised separately. Check whether the method of
+      measurement expects framing by length or by area for your project.
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: AIQS / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Carpentry / framing
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    related_standards:
+      - document: AS 1684 Residential timber-framed construction (Parts 1-4)
+        clause: null
+        clause_verified: false
+        relevance: Member sizes, spacings and bracing that define the framing spec.
+      - document: NASH Standard - Residential and low-rise steel framing
+        clause: null
+        clause_verified: false
+        relevance: Steel-framing counterpart referenced by the NCC (verify current status).
+    verification: {status: placeholder_unverified}
+
+  - id: ROOF-SHEET-001
+    version: 1
+    title: Metal roof sheeting (on slope)
+    category: roofing
+    measure_type: area
+    unit: m2
+    required_inputs: [pitch_deg]
+    convention: >-
+      Measure roof covering as the true area on the slope (plan area divided by
+      cos(pitch)) with no deduction for laps; laps and waste belong in the rate,
+      not the quantity. Penetrations below the minimum-size rule are not
+      deducted. Ridges, hips, valleys, barges and flashings are measured
+      separately by length.
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: AIQS / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Roofing
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    related_standards:
+      - document: AS 1562.1 Design and installation of sheet roof and wall cladding - Metal
+        clause: null
+        clause_verified: false
+        relevance: Minimum pitches, fixing and laps affecting specification.
+      - document: NCC - ABCB Housing Provisions Standard (roof cladding provisions)
+        clause: null
+        clause_verified: false
+        relevance: Deemed-to-satisfy sheet roofing requirements for Class 1/10 buildings.
+    verification: {status: placeholder_unverified}
+
+  - id: ROOF-FLASH-001
+    version: 1
+    title: Ridges, hips, valleys and flashings
+    category: roofing
+    measure_type: linear
+    unit: m
+    convention: >-
+      Measure by length along the member, stating girth/profile. Measured on
+      the true (sloping) length for hips and valleys - a plan-length
+      measurement must be corrected for pitch.
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: AIQS / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Roofing
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    verification: {status: placeholder_unverified, notes: "Tool does not yet correct hip/valley plan length for pitch."}
+
+  - id: FIN-TILE-WET-001
+    version: 1
+    title: Floor and wall tiling in wet areas
+    category: wet-areas
+    measure_type: area
+    unit: m2
+    convention: >-
+      Measure tiling net in square metres, floors and walls separately, stating
+      tile type and size. Waterproofing membrane is a separate item measured
+      to the extents required by the waterproofing standard / NCC wet-area
+      provisions, which may differ from the tiled extent.
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: AIQS / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Finishes - tiling
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    related_standards:
+      - document: AS 3740 Waterproofing of domestic wet areas
+        clause: null
+        clause_verified: false
+        relevance: Defines waterproofing extents (shower, floor, wall heights) that drive membrane quantities.
+      - document: NCC Volume Two / ABCB Housing Provisions - wet area waterproofing
+        clause: null
+        clause_verified: false
+        relevance: DTS wet-area requirements; references AS 3740.
+      - document: AS 3958 Ceramic tiles (Part 1 - guide to installation)
+        clause: null
+        clause_verified: false
+        relevance: Installation practice; affects specification not quantity.
+    verification: {status: placeholder_unverified}
+
+  - id: FIN-SKIRT-001
+    version: 1
+    title: Skirtings
+    category: finishes
+    measure_type: linear
+    unit: m
+    convention: >-
+      Measure by length along the wall face at floor level, stating profile and
+      material. Check the method of measurement for whether door openings are
+      deducted (common practice is to deduct the opening width).
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: AIQS / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Joinery / finishes
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    verification: {status: placeholder_unverified}
+
+  - id: FIN-PLB-CEIL-001
+    version: 1
+    title: Plasterboard ceilings
+    category: finishes
+    measure_type: area
+    unit: m2
+    convention: >-
+      Measure net ceiling area in square metres stating board type and
+      thickness. Cornices measured separately by length. Small openings (light
+      fittings, grilles) below the minimum-size rule are not deducted.
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: AIQS / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Linings / plasterboard
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    related_standards:
+      - document: AS/NZS 2589 Gypsum linings - Application and finishing
+        clause: null
+        clause_verified: false
+        relevance: Installation and finish levels; affects spec, not quantity.
+    verification: {status: placeholder_unverified}
+
+  - id: WD-DOOR-001
+    version: 1
+    title: Doors (enumerated by type)
+    category: windows-doors
+    measure_type: count
+    unit: no.
+    convention: >-
+      Enumerate doors by type as scheduled (leaf size, material, fire rating,
+      hardware set). Frames, hardware and finishes may be itemised separately.
+      Fire-rated doorsets are kept separate from non-rated.
+    source:
+      document: Australian and New Zealand Standard Method of Measurement of Building Works (ANZSMM)
+      publisher: AIQS / NZIQS
+      edition: "1st edition, 2018 (VERIFY)"
+      clause: null
+      section_hint: Doors / joinery
+      clause_verified: false
+      url: https://www.aiqs.com.au/
+    related_standards:
+      - document: AS 1905.1 Components for the protection of openings in fire-resistant walls - Fire-resistant doorsets
+        clause: null
+        clause_verified: false
+        relevance: Identifies fire-rated doorsets that must be itemised separately.
+    verification: {status: placeholder_unverified}
+
+  - id: GEN-FLOORAREA-001
+    version: 1
+    title: Floor area (NCC definition)
+    category: general
+    measure_type: area
+    unit: m2
+    convention: >-
+      For NCC compliance checks (e.g. classification or fire-compartment size
+      limits) floor area is taken as defined in the NCC definitions, which is
+      NOT the same as a QS gross floor area or a Property Council lettable
+      area. Label which definition a measured area follows.
+    source:
+      document: National Construction Code - Schedule 1 Definitions ('floor area')
+      publisher: Australian Building Codes Board (ABCB)
+      edition: "NCC 2022 (VERIFY - check whether NCC 2025 has been adopted in your state/territory)"
+      clause: null
+      section_hint: Definitions schedule, term 'floor area'
+      clause_verified: false
+      url: https://ncc.abcb.gov.au/
+    related_standards:
+      - document: Property Council of Australia - Method of Measurement (lettable/gross areas)
+        clause: null
+        clause_verified: false
+        relevance: Commercial area definitions (GLA/GFA) - different purpose from NCC floor area.
+    verification: {status: placeholder_unverified}

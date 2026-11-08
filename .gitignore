@@ -1,0 +1,12 @@
+__pycache__/
+.venv/
+data/*
+!data/.gitkeep
+rules/user/*
+!rules/user/.gitkeep
+*.xlsx
+tests/.tmp-config/
+build/
+dist/
+*.spec
+release/

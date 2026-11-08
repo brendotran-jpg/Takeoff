@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Takeoff</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="appbar">
+  <strong class="brand">Takeoff</strong>
+  <div class="menu">
+    <button id="fileMenuBtn" aria-haspopup="true">File ▾</button>
+    <div id="fileMenu" class="menu-pop" hidden>
+      <button data-act="new">New project…</button>
+      <button data-act="open">Open project…</button>
+      <button data-act="saveas">Save project as…</button>
+      <hr>
+      <button data-act="import">Import PDF drawings…</button>
+      <hr>
+      <button data-act="xlsx">Export Excel workbook…</button>
+      <button data-act="csv">Export CSV (items)…</button>
+      <hr>
+      <button data-act="props">Project properties…</button>
+      <div id="recentList"></div>
+    </div>
+  </div>
+  <span id="projName" class="projname" title="Project file"></span>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="takeoff" class="active">Takeoff</button>
+    <button role="tab" data-tab="estimate">Estimate</button>
+    <button role="tab" data-tab="compare">Revisions</button>
+  </nav>
+  <span class="spacer"></span>
+  <button id="importBtn" class="primary">Import PDF</button>
+  <input id="uploadInput" type="file" accept="application/pdf" multiple hidden>
+</header>
+
+<!-- ======================= TAKEOFF ======================= -->
+<section id="tab-takeoff" class="tab active">
+  <aside class="left">
+    <div class="panel">
+      <div class="phead"><h3>Drawings</h3></div>
+      <div id="drawingTree" class="tree"></div>
+    </div>
+    <div class="panel grow">
+      <div class="phead"><h3>Takeoff items</h3><button id="newItemBtn" class="small primary">+ New item</button></div>
+      <input id="itemFilter" type="search" placeholder="Filter items…">
+      <div id="itemList" class="items"></div>
+    </div>
+  </aside>
+
+  <div class="center">
+    <div class="toolbar" id="toolbar">
+      <div class="seg" id="tools">
+        <button data-tool="select" title="Select / edit (S)">Select</button>
+        <button data-tool="linear" title="Polyline length (L)">Line</button>
+        <button data-tool="area" title="Polygon area (A)">Area</button>
+        <button data-tool="rect" title="Rectangle (R)">Rect</button>
+        <button data-tool="count" title="Count (C)">Count</button>
+        <button data-tool="cutout" title="Cut-out from an area (X)">Cut-out</button>
+        <button data-tool="calibrate" title="Calibrate scale (K)">Calibrate</button>
+      </div>
+      <label class="chk" title="Shapes drawn now are deductions"><input id="deductTgl" type="checkbox"> Deduct</label>
+      <label class="chk"><input id="snapTgl" type="checkbox" checked> Snap</label>
+      <span class="sep"></span>
+      <button id="undoBtn" title="Undo (Ctrl+Z)">↶</button>
+      <button id="redoBtn" title="Redo (Ctrl+Y)">↷</button>
+      <span class="sep"></span>
+      <button id="zoomOut" title="Zoom out (-)">−</button>
+      <span id="zoomLbl" class="zoomlbl">100%</span>
+      <button id="zoomIn" title="Zoom in (+)">+</button>
+      <button id="zoomFit" title="Fit width (F)">Fit</button>
+    </div>
+    <div id="viewer" class="viewer">
+      <div id="stage" class="stage" hidden>
+        <img id="pageImg" alt="" draggable="false">
+        <svg id="overlay"></svg>
+      </div>
+      <div id="empty" class="empty">
+        <p><b>No drawing open.</b></p>
+        <p>Import PDF drawings (File → Import), then choose a sheet on the left.</p>
+      </div>
+    </div>
+    <div class="statusbar">
+      <span id="stScale">Scale: –</span>
+      <span id="stItem">No active item</span>
+      <span id="stLive" class="live"></span>
+      <span class="spacer"></span>
+      <span id="stHint" class="muted"></span>
+    </div>
+  </div>
+
+  <aside class="right">
+    <div class="panel">
+      <h3>Sheet</h3>
+      <div id="pageMeta" class="muted small"></div>
+      <div id="scaleStatus" class="status warn">Scale not set</div>
+      <div id="scaleWarn" class="warnbox" hidden></div>
+      <div id="scaleCands"></div>
+      <div class="row">
+        <span class="muted">1 :</span><input id="ratioIn" type="number" min="1" step="1" placeholder="100">
+        <span class="muted">@</span>
+        <select id="sheetIn"><option value="">as printed</option><option>A0</option><option>A1</option><option>A2</option><option>A3</option><option>A4</option></select>
+        <button id="setRatio">Set</button>
+      </div>
+    </div>
+    <div class="panel" id="itemPanel" hidden>
+      <h3>Active item</h3>
+      <div class="itemhead"><span id="ipSwatch" class="sw lg"></span><span id="ipName" class="b"></span></div>
+      <div id="ipQty" class="qtybox"></div>
+      <div id="ipIssues" class="warnbox small" hidden></div>
+      <div id="ipInputs" class="row wrap"></div>
+      <div id="ipRule" class="ruleinfo"></div>
+      <div class="row"><button id="ipEdit" class="small">Edit…</button><button id="ipDelete" class="small danger">Delete item</button></div>
+    </div>
+    <div class="panel" id="shapePanel" hidden>
+      <h3>Selected shape</h3>
+      <div id="spInfo" class="small"></div>
+      <label class="chk"><input id="spDeduct" type="checkbox"> Deduction</label>
+      <div id="spInputs" class="row wrap"></div>
+      <div class="row"><button id="spDelete" class="small danger">Delete shape</button></div>
+    </div>
+  </aside>
+</section>
+
+<!-- ======================= ESTIMATE ======================= -->
+<section id="tab-estimate" class="tab">
+  <div class="esttools">
+    <button id="addSection">+ Section</button>
+    <button id="fromItems" title="Add a linked row for every takeoff item not yet in the estimate">Add rows from takeoff items</button>
+    <span class="muted small">Linked quantities update live from the takeoff. Rate = labour + material + plant + subcontract. Total = qty × (1 + waste %) × rate.</span>
+  </div>
+  <div class="estwrap"><table id="estTable" class="est"></table></div>
+</section>
+
+<!-- ======================= REVISIONS ======================= -->
+<section id="tab-compare" class="tab">
+  <div class="esttools">
+    <label>Old <select id="cmpA"></select></label>
+    <label>New <select id="cmpB"></select></label>
+    <label title="Shift the new sheet to align it (PDF points, 1 pt ≈ 0.35 mm on paper)">Offset x <input id="cmpDx" type="number" value="0" step="1"></label>
+    <label>y <input id="cmpDy" type="number" value="0" step="1"></label>
+    <button id="cmpGo" class="primary">Compare</button>
+    <span class="sep"></span>
+    <select id="cmpMode"><option value="move">Move takeoff to new</option><option value="copy">Copy takeoff to new</option></select>
+    <button id="cmpTransfer">Transfer takeoff</button>
+  </div>
+  <div class="legend"><span class="lg-old">■ only in old (removed)</span><span class="lg-new">■ only in new (added)</span><span class="lg-both">■ unchanged</span><span id="cmpStats" class="muted small"></span></div>
+  <div class="cmpview"><img id="cmpImg" alt=""></div>
+</section>
+
+<dialog id="modal"><form method="dialog" id="modalForm"></form></dialog>
+<div id="toast" class="toast" hidden></div>
+<script type="module" src="/static/js/main.js"></script>
+</body>
+</html>
